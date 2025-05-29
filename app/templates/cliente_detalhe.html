@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Detalhes do Cliente{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalhes do Cliente</h2>
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="mb-3">Dados Pessoais</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3"><strong>Nome:</strong> {{ cliente.nome_completo }}</div>
+                <div class="col-md-4 mb-3"><strong>CPF:</strong> {{ cliente.cpf }}</div>
+                <div class="col-md-4 mb-3"><strong>RG:</strong> {{ cliente.rg }}</div>
+                <div class="col-md-4 mb-3"><strong>Data de nascimento:</strong> {{ cliente.data_nascimento.strftime('%d/%m/%Y') if cliente.data_nascimento else 'Não informado' }}</div>
+                <div class="col-md-4 mb-3"><strong>Estado civil:</strong> {{ cliente.estado_civil }}</div>
+                <div class="col-md-4 mb-3"><strong>Nacionalidade:</strong> {{ cliente.nacionalidade }}</div>
+                <div class="col-md-4 mb-3"><strong>Naturalidade:</strong> {{ cliente.naturalidade }}</div>
+                <div class="col-md-4 mb-3"><strong>Nome do Pai:</strong> {{ cliente.nome_pai }}</div>
+                <div class="col-md-4 mb-3"><strong>Nome da Mãe:</strong> {{ cliente.nome_mae }}</div>
+            </div>
+
+            <h5 class="mt-4 mb-3">Contato</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3"><strong>Telefone:</strong> {{ cliente.telefone }}</div>
+                <div class="col-md-4 mb-3"><strong>Email:</strong> {{ cliente.email }}</div>
+                <div class="col-md-4 mb-3"><strong>Profissão:</strong> {{ cliente.profissao }}</div>
+            </div>
+
+            <h5 class="mt-4 mb-3">Endereço</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3"><strong>CEP:</strong> {{ cliente.cep }}</div>
+                <div class="col-md-4 mb-3"><strong>Endereço:</strong> {{ cliente.endereco }}</div>
+                <div class="col-md-4 mb-3"><strong>Cidade:</strong> {{ cliente.cidade }}</div>
+                <div class="col-md-4 mb-3"><strong>Estado:</strong> {{ cliente.estado }}</div>
+            </div>
+
+            <h5 class="mt-4 mb-3">Outros</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3"><strong>Tipo de causa:</strong> {{ cliente.tipo_causa }}</div>
+                <div class="col-md-4 mb-3"><strong>Data de cadastro:</strong> {{ data_cadastro_formatada }}</div>
+                <div class="col-md-4 mb-3"><strong>Última atualização:</strong> {{ ultima_atualizacao_formatada }}</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2 flex-wrap">
+        <a href="{{ url_for('cliente.editar_cliente', cliente_id=cliente.id) }}" class="btn btn-warning">Editar Cliente</a>
+        <a href="{{ url_for('cliente.lista_clientes') }}" class="btn btn-secondary">Voltar à Lista</a>
+        {% if templates %}
+            <form method="post" action="{{ url_for('documentos.gerar_documento_redirect', cliente_id=cliente.id) }}" class="mt-3">
+                {{ form.hidden_tag() }}
+                <input type="hidden" name="cliente_id" value="{{ cliente.id }}">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-6">
+                        <select class="form-select" name="template_id" required>
+                            <option value="" disabled selected>Selecione um modelo de documento</option>
+                            {% for template in templates %}
+                                <option value="{{ template.id }}">{{ template.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-auto">
+                        <button class="btn btn-outline-info" type="submit">Gerar Documento</button>
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            <div class="mt-3 text-muted">Nenhum modelo de documento disponível.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

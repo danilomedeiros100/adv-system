@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Lista de Especialidades{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Especialidades Cadastradas</h2>
+        <a href="{{ url_for('especialidade.nova_especialidade') }}" class="btn btn-success">Nova Especialidade</a>
+    </div>
+    <table class="table table-striped table-bordered table-responsive">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Ativa</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for especialidade in especialidades %}
+            <tr>
+                <td>{{ especialidade.id }}</td>
+                <td>{{ especialidade.nome }}</td>
+                <td>{{ 'Sim' if especialidade.ativa else 'Não' }}</td>
+                <td>
+                    <a href="{{ url_for('especialidade.editar_especialidade', id=especialidade.id) }}" class="btn btn-sm btn-outline-warning me-1" title="Editar especialidade">Editar</a>
+                    <form method="POST" action="{{ url_for('especialidade.excluir_especialidade', id=especialidade.id) }}" style="display:inline;" onsubmit="return confirm('Deseja realmente excluir esta especialidade?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir especialidade">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

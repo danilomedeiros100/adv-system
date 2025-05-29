@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{% if editar %}Editar{% else %}Novo{% endif %} Template de Documento{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if editar %}Editar{% else %}Novo{% endif %} Template de Documento</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.nome.label(class="form-label") }}
+            {{ form.nome(class="form-control") }}
+            {% for error in form.nome.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        {% if not editar %}
+        <div class="mb-3">
+            {{ form.arquivo.label(class="form-label") }}
+            {{ form.arquivo(class="form-control") }}
+            {% for error in form.arquivo.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+        <a href="{{ url_for('documentos.listar_templates') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

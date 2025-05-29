@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Painel{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    Bem-vindo, {{ usuario.nome }}!
+                </div>
+                <div class="card-body">
+                    <p class="lead">Você está logado como <strong>{{ usuario.papel }}</strong>.</p>
+                    <p>Use o menu para acessar as funcionalidades do sistema.</p>
+
+                    <h5 class="mt-4">Clientes</h5>
+                    <div class="mb-3 d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{{ url_for('cliente.lista_clientes') }}" class="btn btn-outline-primary">Listar Clientes</a>
+                        <a href="{{ url_for('cliente.novo_cliente') }}" class="btn btn-outline-success">Novo Cliente</a>
+                    </div>
+
+              {% if current_user.papel == 'administrador' %}
+                    <h5 class="mt-4">Usuários</h5>
+                    <div class="mb-3 d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{{ url_for('auth.novo_usuario') }}" class="btn btn-outline-primary">Cadastrar Novo Usuário</a>
+                        <a href="{{ url_for('usuario.listar_usuarios') }}" class="btn btn-outline-info">Listar Usuários</a>
+                    </div>
+
+                    <h5 class="mt-4">Templates</h5>
+                    <div class="mb-3 d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{{ url_for('documentos.novo_template') }}" class="btn btn-outline-secondary">Cadastrar Novo Template</a>
+                        <a href="{{ url_for('documentos.listar_templates') }}" class="btn btn-outline-info">Listar Templates</a>
+                    </div>
+
+                    <h5 class="mt-4">Especialidades</h5>
+                    <div class="mb-3 d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{{ url_for('especialidade.listar_especialidades') }}" class="btn btn-outline-info">Listar Especialidades</a>
+                    </div>
+                    {% endif %}
+
+                    <div class="mt-3 text-center">
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">Sair</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

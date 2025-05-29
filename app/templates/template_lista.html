@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Templates Disponíveis{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Templates Disponíveis</h2>
+
+    {% if templates %}
+        <table class="table table-striped mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Arquivo</th>
+                    <th>Data de Criação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for template in templates %}
+                <tr>
+                    <td>{{ template.nome }}</td>
+                    <td>{{ template.arquivo or '' }}</td>
+                    <td>{{ template.data_criacao.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Ações do template">
+                            <a href="{{ url_for('documentos.visualizar_template', id=template.id) }}" class="btn btn-sm btn-outline-primary" target="_blank" title="Visualizar template no navegador">Visualizar</a>
+                            <a href="{{ url_for('documentos.download_template', id=template.id) }}" class="btn btn-sm btn-outline-success" download title="Fazer download do template">Download</a>
+                            <a href="{{ url_for('documentos.editar_template', id=template.id) }}" class="btn btn-sm btn-outline-warning" title="Editar template">Editar</a>
+                            <form method="POST" action="{{ url_for('documentos.excluir_template', id=template.id) }}" onsubmit="return confirm('Deseja realmente excluir este template?');" style="display: inline;">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum template cadastrado até o momento.</p>
+    {% endif %}
+</div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{{ url_for('documentos.novo_template') }}" class="btn btn-success">Cadastrar Novo Template</a>
+</div>
+{% endblock %}

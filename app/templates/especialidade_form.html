@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{% if editar %}Editar{% else %}Nova{% endif %} Especialidade{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if editar %}Editar{% else %}Nova{% endif %} Especialidade</h2>
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome da Especialidade</label>
+            <input type="text" class="form-control" id="nome" name="nome"
+                   value="{{ especialidade.nome if especialidade else '' }}" required maxlength="100" autofocus>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="ativa" name="ativa" {% if especialidade and especialidade.ativa %}checked{% endif %}>
+            <label class="form-check-label" for="ativa">Ativa</label>
+        </div>
+        <button type="submit" class="btn btn-primary">{% if editar %}Salvar Alteração{% else %}Cadastrar{% endif %}</button>
+        <a href="{{ url_for('especialidade.listar_especialidades') }}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

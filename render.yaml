@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: adv-system
-    env: python
-    buildCommand: ""
-    startCommand: gunicorn app:app
-    envVars:
-      - key: FLASK_ENV
-        value: production

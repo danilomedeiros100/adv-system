@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Lista de Clientes{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Clientes Cadastrados</h2>
+    </div>
+    <form method="GET" action="{{ url_for('cliente.lista_clientes') }}" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <input type="text" name="q" value="{{ request.args.get('q', '') }}" class="form-control" placeholder="Buscar por nome ou CPF">
+        </div>
+        <div class="col-md-2">
+            <select name="tipo" class="form-select">
+                <option value="">Todos os Tipos</option>
+                <option value="trabalhista" {{ 'selected' if request.args.get('tipo') == 'trabalhista' else '' }}>Trabalhista</option>
+                <option value="previdenciario" {{ 'selected' if request.args.get('tipo') == 'previdenciario' else '' }}>Previdenciário</option>
+                <option value="consumidor" {{ 'selected' if request.args.get('tipo') == 'consumidor' else '' }}>Consumidor</option>
+                <option value="civel" {{ 'selected' if request.args.get('tipo') == 'civel' else '' }}>Cível</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="de" value="{{ request.args.get('de', '') }}" class="form-control" placeholder="De">
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="ate" value="{{ request.args.get('ate', '') }}" class="form-control" placeholder="Até">
+        </div>
+        <div class="col-md-3 d-grid">
+            <button type="submit" class="btn btn-outline-primary mb-1">Buscar</button>
+            <a href="{{ url_for('cliente.lista_clientes') }}" class="btn btn-outline-secondary">Limpar</a>
+        </div>
+
+    </form>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{{ url_for('cliente.novo_cliente') }}" class="btn btn-success">Novo Cliente</a>
+</div>
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Tipo de Causa</th>
+                <th>Data de Cadastro</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.nome_completo }}</td>
+                <td>{{ cliente.cpf }}</td>
+                <td>{{ cliente.tipo_causa }}</td>
+                <td>{{ cliente.data_cadastro.strftime('%d/%m/%Y') if cliente.data_cadastro else '' }}</td>
+                <td>
+                    <a href="{{ url_for('cliente.cliente_detalhe', cliente_id=cliente.id) }}" class="btn btn-sm btn-primary">Ver Detalhes</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
